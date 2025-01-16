@@ -1,10 +1,14 @@
 const { Given, When, Then } = require('@wdio/cucumber-framework');
 
-Given('the application is launched', async () => {
+Given('Abro la Aplicacion ', async () => {
     await driver.launchApp();
 });
 
-When('I enter valid credentials', async () => {
+When('Presiono la opcion NO ACCOUNT YET? CREATE ONE', async () => {
+    await $('~labelregisterButton').click();
+});
+
+When('Registro la sigte informacion', async () => {
     await $('~name').setValue('diana');
     await $('~address').setValue('av. siempre viva');
     await $('~email').setValue('diana@prueba.com ');
@@ -13,7 +17,7 @@ When('I enter valid credentials', async () => {
     await $('~confirm_password').setValue('dimuri123');
 });
 
-When('I enter invalid credentials', async () => {
+When('Registro la sigte informacion erronea', async () => {
     await $('~name').setValue('diana');
     await $('~address').setValue('av. siempre viva');
     await $('~email').setValue('diana@prueba.com ');
@@ -22,14 +26,14 @@ When('I enter invalid credentials', async () => {
     await $('~confirm_password').setValue('dimuri323');
 });
 
-When('I tap on the login button', async () => {
-    await $('~loginButton').click();
+When('Presiono el boton CREATE ACCOUNT', async () => {
+    await $('~registerButton').click();
 });
 
-Then('I should see the dashboard', async () => {
+Then('Visualizo el Dashboard con el sms "Hello Word"', async () => {
     await expect($('~dashboard')).toBeDisplayed();
 });
 
-Then('I should see an error message', async () => {
+Then('Visualizo el Dashboard con el sms "Password do not match"', async () => {
     await expect($('~errorMessage')).toBeDisplayed();
 });

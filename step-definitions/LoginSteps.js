@@ -1,27 +1,27 @@
 const { Given, When, Then } = require('@wdio/cucumber-framework');
 
-Given('the application is launched', async () => {
+Given('Abro la Aplicacion', async () => {
     await driver.launchApp();
 });
 
-When('I enter valid credentials', async () => {
-    await $('~username').setValue('valid_user');
-    await $('~password').setValue('valid_password');
+When('Coloco mi correo electronico y contraseña', async () => {
+    await $('~username').setValue('diana.murillo@gmail.com');
+    await $('~password').setValue('dimuri123');
 });
 
-When('I enter invalid credentials', async () => {
-    await $('~username').setValue('invalid_user');
-    await $('~password').setValue('invalid_password');
+When('Coloco mi correo electronico y contraseña erroneos', async () => {
+    await $('~username').setValue('diana.murillo@gmail');
+    await $('~password').setValue('dimuri23');
 });
 
-When('I tap on the login button', async () => {
+When('Presiono el boton de "Login"', async () => {
     await $('~loginButton').click();
 });
 
-Then('I should see the dashboard', async () => {
+Then('Visualizo el Dashboard con el sms "Hello Word"', async () => {
     await expect($('~dashboard')).toBeDisplayed();
 });
 
-Then('I should see an error message', async () => {
+Then('Visualizo el sms de error "Login Failed"', async () => {
     await expect($('~errorMessage')).toBeDisplayed();
 });
