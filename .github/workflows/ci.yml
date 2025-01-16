@@ -1,4 +1,4 @@
-name: UI Test Workflow
+name: API and UI Test Workflow
 
 on:
   push:
@@ -9,24 +9,58 @@ on:
       - main
 
 jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Configurar el repositorio
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Configurar Java
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      # Verificar estructura del proyecto
+      - name: Ensure pom.xml exists
+        run: |
+          if [ ! -f pom.xml ]; then
+            echo "Error: pom.xml no encontrado en el directorio raíz." >&2
+            exit 1
+          fi
+
+      # Instalar dependencias y ejecutar pruebas de API
+      - name: Build and Test API with Maven
+        run: mvn clean install
+
+      # Publicar reportes de pruebas de API
+      - name: Upload API Test Reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: api-test-reports
+          path: target/surefire-reports/
+
   ui-tests:
     runs-on: ubuntu-latest
 
     steps:
-    # Configurar el repositorio
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      # Configurar el repositorio
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    # Configurar Node.js
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
+      # Configurar Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
 
-    # Instalar dependencias
-    - name: Install dependencies
-      run: npm install
+      # Instalar dependencias de UI
+      - name: Install UI Test Dependencies
+        run: npm install
 
-    # Iniciar pruebas
-    - name: Run UI Tests
-      run: npx wdio run wdio.conf.js
+      # Ejecutar pruebas de UI
+      - name: Run UI Tests
+        run: npm test
